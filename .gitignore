@@ -2,6 +2,7 @@
 
 *
 !.gitignore
+!post-checkout
 
 !README.md
 !CONTRIBUTING.md # https://github.com/linuxthemes/base
