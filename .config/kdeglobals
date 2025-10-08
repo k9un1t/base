@@ -142,7 +142,7 @@ TerminalApplication=/usr/bin/ghostty --gtk-single-instance=true
 TerminalService=com.mitchellh.ghostty.desktop
 
 [Icons]
-Theme=breeze-dark
+Theme=We10X-black-dark
 
 [KDE]
 AnimationDurationFactor=0.08838834764831843
