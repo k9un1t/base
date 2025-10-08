@@ -7,7 +7,7 @@
   <property name="last-show-hidden" type="bool" value="true"/>
   <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_50_PERCENT"/>
   <property name="last-separator-position" type="int" value="170"/>
-  <property name="last-details-view-column-widths" type="string" value="50,50,118,50,50,977,50,50,457,50,50,75,50,138"/>
+  <property name="last-details-view-column-widths" type="string" value="50,50,118,50,50,977,50,50,530,50,50,65,50,75"/>
   <property name="last-window-width" type="int" value="959"/>
   <property name="last-window-height" type="int" value="1052"/>
   <property name="last-sort-column" type="string" value="THUNAR_COLUMN_NAME"/>
