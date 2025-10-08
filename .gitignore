@@ -23,7 +23,6 @@
 !.config/micro/bindings.json
 !.config/micro/settings.json
 
-
 !.config/rofi
 !.config/rofi/*
 
@@ -50,6 +49,7 @@
 
 # kde
 !.config/konsolerc
+!.config/spectaclerc
 !.config/ksplashrc
 !.config/kdeglobals
 !.config/kdedefaults
