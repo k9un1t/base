@@ -56,8 +56,6 @@
 #gnome
 
 
-
-
 #xfce
 !.config/xfce4
 !.config/xfce4/**
@@ -67,6 +65,4 @@
 
 !.config/Mousepad
 !.config/Mousepad/*
-
-
 
