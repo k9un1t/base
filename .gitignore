@@ -71,3 +71,6 @@
 !.config/Mousepad
 !.config/Mousepad/*
 
+# hypr
+!.config/hypr
+!.config/hypr/*
