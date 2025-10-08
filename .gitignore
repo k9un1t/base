@@ -1,3 +1,5 @@
+# base
+
 *
 !.gitignore
 
@@ -41,7 +43,7 @@
 !.config/gtk-4.0
 !.config/gtk-4.0/*
 
-#kde
+# kde
 !.config/konsolerc
 !.config/ksplashrc
 !.config/kdeglobals
@@ -58,10 +60,10 @@
 !.config/xsettingsd/xsettingsd.conf
 
 
-#gnome
+# gnome
 
 
-#xfce
+# xfce
 !.config/xfce4
 !.config/xfce4/**
 
