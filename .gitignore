@@ -19,6 +19,11 @@
 !.config/eza
 !.config/eza/*
 
+!.config/micro
+!.config/micro/bindings.json
+!.config/micro/settings.json
+
+
 !.config/rofi
 !.config/rofi/*
 
