@@ -141,6 +141,9 @@ Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\
 TerminalApplication=/usr/bin/ghostty --gtk-single-instance=true
 TerminalService=com.mitchellh.ghostty.desktop
 
+[Icons]
+Theme=breeze-dark
+
 [KDE]
 AnimationDurationFactor=0.08838834764831843
 LookAndFeelPackage=org.kde.breezedark.desktop
