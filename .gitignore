@@ -42,12 +42,18 @@
 !.config/gtk-4.0/*
 
 #kde
-!.config/Trolltech.conf
 !.config/konsolerc
 !.config/ksplashrc
 !.config/kdeglobals
 !.config/kdedefaults
 !.config/kdedefaults/*
+!.config/plasmarc
+!.config/plasmashellrc
+!.config/plasmanotifyrc
+!.config/plasma-localerc
+!.config/plasma-welcomrc
+!.config/plasma-org.kde.plasma.desktop-appletsrc
+
 
 !.config/xsettingsd
 !.config/xsettingsd/xsettingsd.conf
