@@ -1,6 +1,0 @@
-
-window-decoration = false
-background-opacity = 0.5
-# font-family = "Geist Mono"
-theme = TokyoNight
-confirm-close-surface=false
