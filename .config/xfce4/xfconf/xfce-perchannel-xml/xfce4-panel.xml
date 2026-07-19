@@ -181,12 +181,12 @@
       <property name="profile-shape" type="int" value="2"/>
       <property name="launcher-icon-size" type="int" value="2"/>
       <property name="recent" type="array">
+        <value type="string" value="xfce-ui-settings.desktop"/>
         <value type="string" value="xfce-keyboard-settings.desktop"/>
         <value type="string" value="xfce4-power-manager-settings.desktop"/>
         <value type="string" value="org.freedesktop.IBus.Setup.desktop"/>
         <value type="string" value="xfce-settings-manager.desktop"/>
         <value type="string" value="org.gnome.Software.desktop"/>
-        <value type="string" value="xfce-ui-settings.desktop"/>
         <value type="string" value="org.gnome.Calculator.desktop"/>
         <value type="string" value="org.pulseaudio.pavucontrol.desktop"/>
         <value type="string" value="synaptic.desktop"/>
