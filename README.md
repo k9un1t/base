@@ -4,8 +4,13 @@
 
 Install base
 ```sh
-source <(curl https://linuxthemes.org/install)
+curl -fsSL https://linuxthemes.org/install | sh
 ```
+
+Safe to run on a machine where `$HOME` already contains a git repository:
+the installer adopts the existing repo, points `origin` at the Themes remote,
+backs up your current settings in a local branch, then switches
+to `base`.
 
 ## Use Themes
 

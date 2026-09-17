@@ -1,7 +1,25 @@
-git init $HOME                                              # Initialize home
-git remote add origin https://github.com/linuxthemes/base   # Add Themes base
-git pull origin $(git branch --show-current)                # Pull current branch
-git add .; git commit -m "Themes: Save user settings."      # Back up user settings
-git switch base                                             # Checkout to base
-cp post-checkout .git/hooks/post-checkout                   # Copy post-checkout
-git switch base                                             # Checkout to base to post-checkout
+#!/bin/sh
+set -eu
+THEMES_REMOTE="https://github.com/linuxthemes/base"
+
+cd "$HOME" || exit 1
+
+git init -q .
+
+if git remote get-url origin >/dev/null 2>&1; then
+    git remote set-url origin "$THEMES_REMOTE"
+else
+    git remote add origin "$THEMES_REMOTE"
+fi
+
+git remote set-head origin -a >/dev/null 2>&1 || true
+git fetch origin base
+git show origin/base:.gitignore > .gitignore
+git rm -r -q --cached . 2>/dev/null || true
+git add -A
+git commit -m "Themes: Save user settings." || true
+git switch base || git switch -c base --track origin/base
+cp post-checkout .git/hooks/post-checkout
+sh .git/hooks/post-checkout || true
+
+echo "Themes Base installed. Use 'themes-switch <branch>' to switch configurations."

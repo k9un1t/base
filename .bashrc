@@ -104,7 +104,7 @@ alias fzfa='fzf --style full \
     --color "header-border:#6699cc,header-label:#99ccff"'
 
 # --- Themes ---
-alias themes-install="git init $HOME && git remote add origin https://github.com/linuxthemes/base && git pull origin main"
+alias themes-install="sh $HOME/install"
 alias themes-update="git pull"
 alias themes-switch="git checkout"
 alias themes-create="git checkout -b" 

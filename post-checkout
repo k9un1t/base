@@ -1,17 +1,51 @@
 #!/bin/sh
 
-if [[ "$XDG_CURRENT_DESKTOP" == *"KDE"* ]]; then
-    plasmashell --replace & disown 
-fi
+# Not a graphical session (SSH / headless / container) -> nothing to reload
+[ -n "$DISPLAY" ] || [ -n "$WAYLAND_DISPLAY" ] || exit 0
 
-if [[ "$XDG_CURRENT_DESKTOP" == *"xfce"* ]]; then
-    xfce-session -r
-fi
+restart() {
+    command -v "$1" >/dev/null 2>&1 || return 0
+    nohup "$@" >/dev/null 2>&1 &
+}
 
-if [[ "$XDG_CURRENT_DESKTOP" == *"gnome"* ]]; then
-    echo "gnome"
-fi
+reload() {
+    command -v "$1" >/dev/null 2>&1 || return 0
+    "$@" >/dev/null 2>&1
+}
 
-if [[ "$XDG_CURRENT_DESKTOP" == *"i3"* ]]; then
-    echo "i3"
-fi
+DESKTOP="$(printf '%s' "${XDG_CURRENT_DESKTOP:-}" | tr '[:upper:]' '[:lower:]')"
+
+case "$DESKTOP" in
+    *kde*|*plasma*)   restart plasmashell --replace ;;
+    *gnome*|*ubuntu*)
+        if [ -n "$WAYLAND_DISPLAY" ]; then
+            reload busctl --user call org.gnome.Shell /org/gnome/Shell \
+                org.gnome.Shell Eval s 'Meta.restart("themes")'
+        else
+            restart gnome-shell --replace
+        fi
+        ;;
+    *xfce*)
+        reload xfce4-panel -r
+        reload xfdesktop --reload
+        ;;
+    *cinnamon*)       restart cinnamon --replace ;;
+    *mate*)           restart mate-panel --replace ;;
+    *budgie*)         restart budgie-panel --replace ;;
+    *pantheon*|*elementary*) restart io.elementary.wingpanel --replace ;;
+    *lxqt*)           restart lxqt-panel ;;
+    *lxde*|*lubuntu*) restart lxpanel ;;
+    *deepin*)         restart dde-desktop ;;
+    *cosmic*)         echo "post-checkout: COSMIC restart not supported yet" >&2 ;;
+    *hyprland*)       reload hyprctl reload ;;
+    *sway*)           reload swaymsg reload ;;
+    *i3*)             reload i3-msg reload ;;
+    *openbox*)        reload openbox --reconfigure ;;
+    *bspwm*)          reload bspc wm -r ;;
+    *awesome*)        reload awesome-client 'awesome.restart()' ;;
+    *dwm*)            echo "post-checkout: dwm - recompile/restart manually" >&2 ;;
+    *)
+        echo "post-checkout: no reload rule for \"$XDG_CURRENT_DESKTOP\"" >&2 ;;
+esac
+
+exit 0
