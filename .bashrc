@@ -111,3 +111,4 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+case ":$PATH:" in *:/usr/sbin:*) ;; *) export PATH="$PATH:/usr/sbin" ;; esac
