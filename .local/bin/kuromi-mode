@@ -225,6 +225,8 @@ soft)
     put_rgba xfce4-desktop "$LABEL_FG" "0.165,0.114,0.2,1.0"
     put xfce4-desktop /desktop-icons/use-custom-label-background-color bool true
     put xfce4-desktop /desktop-icons/use-custom-label-text-color bool true
+    # notifications (volume bar etc.): Kuromi-Soft notify theme, used in both modes
+    [ -d "$HOME/.themes/Kuromi-Soft/xfce-notify-4.0" ] && put xfce4-notifyd /theme string Kuromi-Soft
     # GTK4 / libadwaita apps: light scheme + the Soft palette (only if its CSS file exists)
     color_scheme prefer-light
     if [ -f "$CONF/gtk-4.0/kuromi-soft.css" ]; then

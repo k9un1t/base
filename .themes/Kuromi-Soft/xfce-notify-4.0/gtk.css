@@ -1,0 +1,56 @@
+/* Kuromi Soft notifications (xfce4-notifyd).
+   Same palette as ~/.config/gtk-3.0/kuromi-soft.css and the Whisker Menu. */
+
+#XfceNotifyWindow {
+    background-color: #c6b3e0;          /* light lilac bubble */
+    border: 2px solid #7e54b6;          /* deeper orchid edge */
+    border-radius: 8px;
+}
+
+#XfceNotifyWindow label,
+#XfceNotifyWindow image {
+    color: #2a1d33;                     /* dark plum text */
+}
+
+#XfceNotifyWindow label#summary {
+    font-weight: bold;
+}
+
+#XfceNotifyWindow label#body {
+    font-weight: normal;                /* the system font is bold; keep body text regular */
+}
+
+/* volume / brightness bar */
+#XfceNotifyWindow progressbar {
+    border-radius: 4px;
+}
+
+#XfceNotifyWindow progressbar progress {
+    min-height: 14px;
+    background-image: none;
+    background-color: #7b3fa0;          /* Kuromi purple */
+    border: none;
+    border-radius: 4px;
+}
+
+#XfceNotifyWindow progressbar trough {
+    min-height: 14px;
+    background-image: none;
+    background-color: #b69dd7;          /* lilac track */
+    border: 1px solid #a98bd0;
+    border-radius: 4px;
+}
+
+/* action buttons */
+#XfceNotifyWindow button {
+    border: 1px solid #7e54b6;
+    background-image: none;
+    background-color: #b69dd7;
+    color: #2a1d33;
+    border-radius: 6px;
+}
+
+#XfceNotifyWindow button:hover {
+    background-color: #7b3fa0;
+    color: #ffffff;
+}
