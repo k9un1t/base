@@ -81,3 +81,12 @@
 # hypr
 !.config/hypr
 !.config/hypr/*
+
+# personal files: never commit
+Pictures/
+Documents/
+Music/
+Videos/
+Desktop/
+Downloads/
+.config/xfce4/desktop/icons.screen*.yaml
