@@ -62,7 +62,7 @@
   <property name="desktop-icons" type="empty">
     <property name="use-custom-font-size" type="bool" value="true"/>
     <property name="icon-size" type="uint" value="44"/>
-    <property name="use-custom-label-background-color" type="bool" value="false"/>
+    <property name="use-custom-label-background-color" type="bool" value="true"/>
     <property name="tooltip-size" type="double" value="52"/>
     <property name="font-size" type="double" value="14"/>
     <property name="style" type="int" value="2"/>
@@ -74,12 +74,19 @@
     </property>
     <property name="use-custom-label-text-color" type="bool" value="true"/>
     <property name="label-text-color" type="array">
-      <value type="double" value="1"/>
-      <value type="double" value="1"/>
-      <value type="double" value="1"/>
+      <value type="double" value="0.16500000000000001"/>
+      <value type="double" value="0.114"/>
+      <value type="double" value="0.20000000000000001"/>
       <value type="double" value="1"/>
     </property>
     <property name="show-hidden-files" type="bool" value="false"/>
+    <property name="label-background-color" type="array">
+      <value type="double" value="0.66200000000000003"/>
+      <value type="double" value="0.54600000000000004"/>
+      <value type="double" value="0.81399999999999995"/>
+      <value type="double" value="0.84999999999999998"/>
+    </property>
+    <property name="ellipsize-icon-labels" type="bool" value="false"/>
   </property>
   <property name="last" type="empty">
     <property name="window-width" type="int" value="1119"/>

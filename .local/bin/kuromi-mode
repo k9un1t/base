@@ -22,15 +22,17 @@ put()  { xfconf-query -c "$1" -p "$2" -s "$4" 2>/dev/null || xfconf-query -c "$1
 
 term_keys="/color-background /color-foreground /color-cursor /color-selection /color-selection-background /color-bold /color-palette /background-mode /background-darkness"
 
-# Top panel colour: 4 numbers 0-1 (red, green, blue, opacity), written as "r,g,b,a"
+# Colours stored as 4 numbers 0-1 (red, green, blue, opacity), written as "r,g,b,a"
 PANEL_RGBA=/panels/panel-1/background-rgba
-get_rgba() { xfconf-query -c xfce4-panel -p "$PANEL_RGBA" 2>/dev/null | grep -E '^[0-9.]+$' | paste -sd, -; }
-put_rgba() {
+LABEL_BG=/desktop-icons/label-background-color
+LABEL_FG=/desktop-icons/label-text-color
+get_rgba() { xfconf-query -c "$1" -p "$2" 2>/dev/null | grep -E '^[0-9.]+$' | paste -sd, -; }
+put_rgba() {   # put_rgba CHANNEL PROPERTY "r,g,b,a"
     local IFS=, args=() v
-    for v in $1; do args+=(-t double -s "$v"); done
-    [ "${#args[@]}" -eq 16 ] || { echo "(panel colour '$1' isn't 4 numbers, leaving the panel alone)"; return 0; }
-    xfconf-query -c xfce4-panel -p "$PANEL_RGBA" "${args[@]}" 2>/dev/null \
-        || xfconf-query -c xfce4-panel -p "$PANEL_RGBA" -n -a "${args[@]}"
+    for v in $3; do args+=(-t double -s "$v"); done
+    [ "${#args[@]}" -eq 16 ] || { [ -n "$3" ] && echo "(colour '$3' for $2 isn't 4 numbers, leaving it alone)"; return 0; }
+    xfconf-query -c "$1" -p "$2" "${args[@]}" 2>/dev/null \
+        || xfconf-query -c "$1" -p "$2" -n -a "${args[@]}"
 }
 
 # Claude Code's theme lives in ~/.claude/settings.json ("dark-ansi", "light-ansi", ...)
@@ -154,6 +156,11 @@ window#whiskermenu-window entry.search,
 window#whiskermenu-window entry.search:focus {
   background-color: @whisker_lilac_light;
 }
+
+/* Desktop icon labels sit on an orchid chip with dark text: no shadow needed (it smudges dark text) */
+XfdesktopIconView.view {
+  text-shadow: none;
+}
 EOF
 }
 
@@ -170,7 +177,11 @@ soft)
             echo "icons=$(get xsettings /Net/IconThemeName)"
             for k in $term_keys; do echo "term$k=$(get xfce4-terminal "$k")"; done
             echo "claude=$(claude_theme)"
-            echo "panel=$(get_rgba)"
+            echo "panel=$(get_rgba xfce4-panel "$PANEL_RGBA")"
+            echo "label_bg=$(get_rgba xfce4-desktop "$LABEL_BG")"
+            echo "label_fg=$(get_rgba xfce4-desktop "$LABEL_FG")"
+            echo "label_bg_on=$(get xfce4-desktop /desktop-icons/use-custom-label-background-color)"
+            echo "label_fg_on=$(get xfce4-desktop /desktop-icons/use-custom-label-text-color)"
         } > "$SAVE"
     fi
     write_soft_css
@@ -200,7 +211,12 @@ soft)
     put xfce4-terminal /color-palette string '#2a1d33;#a8305f;#3c6e4a;#7d5f1a;#5c4fa8;#7b3fa0;#2c6670;#c4b8d0;#4a3757;#c0447a;#4c8059;#94721f;#6a5fb8;#9350b8;#367a85;#cfc5d9'
     put xfce4-terminal /background-mode string TERMINAL_BACKGROUND_TRANSPARENT
     put xfce4-terminal /background-darkness double 0.92   # 92% opaque
-    put_rgba "0.662,0.546,0.814,0.658"   # top panel: #a98bd0 at 66% opacity
+    put_rgba xfce4-panel "$PANEL_RGBA" "0.662,0.546,0.814,0.658"   # top panel: #a98bd0 at 66% opacity
+    # desktop icon labels: orchid chip (#a98bd0, 85%) with dark plum text (#2a1d33)
+    put_rgba xfce4-desktop "$LABEL_BG" "0.662,0.546,0.814,0.85"
+    put_rgba xfce4-desktop "$LABEL_FG" "0.165,0.114,0.2,1.0"
+    put xfce4-desktop /desktop-icons/use-custom-label-background-color bool true
+    put xfce4-desktop /desktop-icons/use-custom-label-text-color bool true
     claude_theme light-ansi   # dark-ansi highlights are unreadable on the lavender background
     ensure_prompt_block
     echo soft > "$MODE_FILE"
@@ -210,6 +226,7 @@ soft)
 dark)
     theme="Orchis-Purple-Dark"; wm="Orchis-Purple-Dark"; icons="Kuromi-Candy"; claude="dark-ansi"
     panel="0.180,0.133,0.220,0.66"   # fallback: dark plum #2e2238 at 66% opacity
+    label_bg=""; label_fg="1.0,1.0,1.0,1.0"; label_bg_on=false; label_fg_on=true   # fallback: xfdesktop chip, white text
     declare -A term
     # fallbacks for settings older saves don't have
     term[/background-mode]=TERMINAL_BACKGROUND_TRANSPARENT
@@ -222,6 +239,10 @@ dark)
                 icons) [ -n "$v" ] && icons="$v" ;;
                 claude) [ -n "$v" ] && [ "$v" != light-ansi ] && claude="$v" ;;
                 panel)  [ -n "$v" ] && panel="$v" ;;
+                label_bg)    [ -n "$v" ] && label_bg="$v" ;;
+                label_fg)    [ -n "$v" ] && label_fg="$v" ;;
+                label_bg_on) [ -n "$v" ] && label_bg_on="$v" ;;
+                label_fg_on) [ -n "$v" ] && label_fg_on="$v" ;;
                 term/*) [ -n "$v" ] && term["${k#term}"]="$v" ;;
             esac
         done < "$SAVE"
@@ -233,7 +254,11 @@ dark)
     for k in $term_keys; do
         [ -n "${term[$k]:-}" ] && put xfce4-terminal "$k" string "${term[$k]}"
     done
-    put_rgba "$panel"
+    put_rgba xfce4-panel "$PANEL_RGBA" "$panel"
+    put_rgba xfce4-desktop "$LABEL_BG" "$label_bg"
+    put_rgba xfce4-desktop "$LABEL_FG" "$label_fg"
+    put xfce4-desktop /desktop-icons/use-custom-label-background-color bool "$label_bg_on"
+    put xfce4-desktop /desktop-icons/use-custom-label-text-color bool "$label_fg_on"
     claude_theme "$claude"
     ensure_prompt_block
     echo dark > "$MODE_FILE"

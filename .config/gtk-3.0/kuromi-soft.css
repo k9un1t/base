@@ -64,3 +64,8 @@ window#whiskermenu-window entry.search,
 window#whiskermenu-window entry.search:focus {
   background-color: @whisker_lilac_light;
 }
+
+/* Desktop icon labels sit on an orchid chip with dark text: no shadow needed (it smudges dark text) */
+XfdesktopIconView.view {
+  text-shadow: none;
+}

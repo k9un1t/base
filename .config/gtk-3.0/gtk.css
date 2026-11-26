@@ -20,6 +20,11 @@ selection {
   color: #ffffff;
 }
 
+/* Desktop icon labels: regular weight (the system font is bold) */
+XfdesktopIconView.view {
+  font-weight: normal;
+}
+
 /* Whisker menu: Kuromi purple instead of grey */
 #whiskermenu-window button:checked,
 #whiskermenu-window button:hover,
