@@ -28,10 +28,27 @@ selection {
   color: #ffffff;
 }
 
-/* Whisker menu: Kuromi purple instead of grey */
-#whiskermenu-window button:checked,
-#whiskermenu-window button:hover,
-#whiskermenu-window treeview:selected {
-  background-color: @kuromi_purple;
-  color: #ffffff;
+/* Whisker menu: one lilac surface, no white frame (matches the terminal) */
+@define-color whisker_lilac       #c6b3e0;  /* menu background */
+@define-color whisker_lilac_light #d7c9e9;  /* search box */
+
+window#whiskermenu-window,
+window#whiskermenu-window > frame > border {
+  background-color: @whisker_lilac;
+}
+
+window#whiskermenu-window scrolledwindow.frame,
+window#whiskermenu-window scrolledwindow.frame treeview.view,
+window#whiskermenu-window scrolledwindow.frame viewport,
+window#whiskermenu-window box.categories,
+window#whiskermenu-window .view,
+window#whiskermenu-window list,
+window#whiskermenu-window list row {
+  background-color: transparent;
+  border: none;
+}
+
+window#whiskermenu-window entry.search,
+window#whiskermenu-window entry.search:focus {
+  background-color: @whisker_lilac_light;
 }

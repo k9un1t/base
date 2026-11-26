@@ -1,7 +1,7 @@
 /* Kuromi Soft: muted lavender light mode. Tweak these 4 colours freely. */
-@define-color soft_bg     #a396b1;  /* window backgrounds */
-@define-color soft_view   #aea2bb;  /* lists, text areas, menus */
-@define-color soft_header #95889f;  /* title bars, toolbars, panel */
+@define-color soft_bg     #b69dd7;  /* window backgrounds */
+@define-color soft_view   #c6b3e0;  /* lists, text areas, menus */
+@define-color soft_header #a98bd0;  /* title bars, toolbars, panel */
 @define-color soft_fg     #2a1d33;  /* text */
 
 window.background, .background, dialog, #whiskermenu-window {

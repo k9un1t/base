@@ -39,10 +39,10 @@
       <property name="enter-opacity" type="uint" value="100"/>
       <property name="leave-opacity" type="uint" value="100"/>
       <property name="background-rgba" type="array">
-        <value type="double" value="0.75577183098591538"/>
-        <value type="double" value="0.68580000000000008"/>
-        <value type="double" value="0.81000000000000005"/>
-        <value type="double" value="0.65836298932384341"/>
+        <value type="double" value="0.66200000000000003"/>
+        <value type="double" value="0.54600000000000004"/>
+        <value type="double" value="0.81399999999999995"/>
+        <value type="double" value="0.65836300000000003"/>
       </property>
       <property name="mode" type="uint" value="0"/>
       <property name="autohide-behavior" type="uint" value="0"/>
@@ -230,6 +230,7 @@
       <property name="profile-shape" type="int" value="0"/>
       <property name="launcher-icon-size" type="int" value="4"/>
       <property name="recent" type="array">
+        <value type="string" value="libreoffice-startcenter.desktop"/>
         <value type="string" value="kdesystemsettings.desktop"/>
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
         <value type="string" value="nm-connection-editor.desktop"/>
@@ -239,7 +240,6 @@
         <value type="string" value="com.github.tchx84.Flatseal.desktop"/>
         <value type="string" value="net.davidotek.pupgui2.desktop"/>
         <value type="string" value="xfce-display-settings.desktop"/>
-        <value type="string" value="xfce4-power-manager-settings.desktop"/>
       </property>
       <property name="view-mode" type="int" value="2"/>
       <property name="favorites" type="array">
@@ -252,6 +252,7 @@
       <property name="menu-height" type="int" value="638"/>
       <property name="menu-width" type="int" value="585"/>
       <property name="button-single-row" type="bool" value="true"/>
+      <property name="launcher-show-description" type="bool" value="false"/>
     </property>
     <property name="plugin-20" type="string" value="separator">
       <property name="style" type="uint" value="0"/>

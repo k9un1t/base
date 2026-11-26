@@ -1,0 +1,23 @@
+/* XPM */
+static const char *left_inactive[] = {
+/* columns rows colors chars-per-pixel */
+"2 16 1 1 ",
+"  c #b69dd7",
+/* pixels */
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  ",
+"  "
+};
