@@ -16,6 +16,13 @@ GTKDIR="$CONF/gtk-3.0"
 GTKCSS="$GTKDIR/gtk.css"
 SOFTCSS="$GTKDIR/kuromi-soft.css"
 IMPORT="@import url(\"file://$SOFTCSS\");"
+# GTK4 / libadwaita apps (Loupe...) ignore GTK3 themes: they follow color-scheme + gtk-4.0/gtk.css
+GTK4CSS="$CONF/gtk-4.0/gtk.css"
+GTK4IMPORT="@import url(\"file://$CONF/gtk-4.0/kuromi-soft.css\");"
+color_scheme() {   # color_scheme -> prints it; color_scheme VALUE -> sets it
+    if [ -z "${1:-}" ]; then gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'"
+    else gsettings set org.gnome.desktop.interface color-scheme "$1" 2>/dev/null; fi
+}
 
 get()  { xfconf-query -c "$1" -p "$2" 2>/dev/null; }
 put()  { xfconf-query -c "$1" -p "$2" -s "$4" 2>/dev/null || xfconf-query -c "$1" -p "$2" -n -t "$3" -s "$4"; }
@@ -182,6 +189,7 @@ soft)
             echo "label_fg=$(get_rgba xfce4-desktop "$LABEL_FG")"
             echo "label_bg_on=$(get xfce4-desktop /desktop-icons/use-custom-label-background-color)"
             echo "label_fg_on=$(get xfce4-desktop /desktop-icons/use-custom-label-text-color)"
+            echo "colorscheme=$(color_scheme)"
         } > "$SAVE"
     fi
     write_soft_css
@@ -217,6 +225,13 @@ soft)
     put_rgba xfce4-desktop "$LABEL_FG" "0.165,0.114,0.2,1.0"
     put xfce4-desktop /desktop-icons/use-custom-label-background-color bool true
     put xfce4-desktop /desktop-icons/use-custom-label-text-color bool true
+    # GTK4 / libadwaita apps: light scheme + the Soft palette (only if its CSS file exists)
+    color_scheme prefer-light
+    if [ -f "$CONF/gtk-4.0/kuromi-soft.css" ]; then
+        touch "$GTK4CSS"
+        grep -qF "gtk-4.0/kuromi-soft.css" "$GTK4CSS" || sed -i "1i $GTK4IMPORT" "$GTK4CSS"
+        [ -s "$GTK4CSS" ] || echo "$GTK4IMPORT" > "$GTK4CSS"
+    fi
     claude_theme light-ansi   # dark-ansi highlights are unreadable on the lavender background
     ensure_prompt_block
     echo soft > "$MODE_FILE"
@@ -227,6 +242,7 @@ dark)
     theme="Orchis-Purple-Dark"; wm="Orchis-Purple-Dark"; icons="Kuromi-Candy"; claude="dark-ansi"
     panel="0.180,0.133,0.220,0.66"   # fallback: dark plum #2e2238 at 66% opacity
     label_bg=""; label_fg="1.0,1.0,1.0,1.0"; label_bg_on=false; label_fg_on=true   # fallback: xfdesktop chip, white text
+    colorscheme=prefer-dark
     declare -A term
     # fallbacks for settings older saves don't have
     term[/background-mode]=TERMINAL_BACKGROUND_TRANSPARENT
@@ -243,11 +259,14 @@ dark)
                 label_fg)    [ -n "$v" ] && label_fg="$v" ;;
                 label_bg_on) [ -n "$v" ] && label_bg_on="$v" ;;
                 label_fg_on) [ -n "$v" ] && label_fg_on="$v" ;;
+                colorscheme) [ -n "$v" ] && [ "$v" != prefer-light ] && colorscheme="$v" ;;
                 term/*) [ -n "$v" ] && term["${k#term}"]="$v" ;;
             esac
         done < "$SAVE"
     fi
     [ -f "$GTKCSS" ] && sed -i '/kuromi-soft.css/d' "$GTKCSS"
+    [ -f "$GTK4CSS" ] && sed -i '/gtk-4.0\/kuromi-soft.css/d' "$GTK4CSS"
+    color_scheme "$colorscheme"
     put xsettings /Net/ThemeName string "$theme"
     put xfwm4 /general/theme string "$wm"
     put xsettings /Net/IconThemeName string "$icons"
