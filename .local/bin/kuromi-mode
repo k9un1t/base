@@ -133,7 +133,9 @@ soft)
     put xsettings /Net/ThemeName string "$light"
     # window frames: recoloured copy of Orchis in ~/.themes/Kuromi-Soft, if it exists
     put xfwm4 /general/theme string "$(find_theme Kuromi-Soft || echo "$light")"
-    if icon_exists Kuromi-Tela-Soft; then       # darker Kuromi-Tela badges for the light theme
+    if icon_exists Kuromi-Colloid; then         # Colloid in one Kuromi purple
+        put xsettings /Net/IconThemeName string Kuromi-Colloid
+    elif icon_exists Kuromi-Tela-Soft; then     # darker Kuromi-Tela badges for the light theme
         put xsettings /Net/IconThemeName string Kuromi-Tela-Soft
     elif icon_exists Kuromi-Candy-Light; then
         put xsettings /Net/IconThemeName string Kuromi-Candy-Light
