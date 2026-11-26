@@ -89,6 +89,7 @@
 .local/bin/*
 !.local/bin/kuromi-mode
 !.local/bin/kuromify-colloid
+!.local/bin/kuromi-wallpaper
 
 # personal files: never commit
 Pictures/

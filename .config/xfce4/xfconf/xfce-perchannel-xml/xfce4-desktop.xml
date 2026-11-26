@@ -50,7 +50,8 @@
           <property name="image-style" type="int" value="4"/>
         </property>
         <property name="workspace1" type="empty">
-          <property name="last-image" type="string" value="/home/k9unit/Pictures/DSCF1335.JPG"/>
+          <property name="last-image" type="string" value="/home/k9unit/.local/share/backgrounds/kuromi-soft-sparkle.png"/>
+          <property name="image-style" type="int" value="5"/>
         </property>
       </property>
     </property>
