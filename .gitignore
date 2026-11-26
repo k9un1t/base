@@ -82,6 +82,13 @@
 !.config/hypr
 !.config/hypr/*
 
+# kuromi-mode script only (rest of ~/.local stays ignored)
+!.local/
+.local/*
+!.local/bin/
+.local/bin/*
+!.local/bin/kuromi-mode
+
 # personal files: never commit
 Pictures/
 Documents/

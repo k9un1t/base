@@ -1,0 +1,188 @@
+#!/usr/bin/env bash
+# kuromi-mode: switch between your dark Kuromi setup and "Kuromi Soft",
+# a muted lavender light mode that's easier on astigmatism.
+#
+#   kuromi-mode soft   -> muted lavender light mode
+#   kuromi-mode dark   -> back to exactly how you had it
+#   kuromi-mode        -> says which mode you're in
+#
+# Tweak the soft colours in ~/.config/gtk-3.0/kuromi-soft.css (top 4 lines).
+
+set -u
+CONF="$HOME/.config"
+MODE_FILE="$CONF/kuromi-mode"
+SAVE="$CONF/kuromi-mode-dark.conf"
+GTKDIR="$CONF/gtk-3.0"
+GTKCSS="$GTKDIR/gtk.css"
+SOFTCSS="$GTKDIR/kuromi-soft.css"
+IMPORT="@import url(\"file://$SOFTCSS\");"
+
+get()  { xfconf-query -c "$1" -p "$2" 2>/dev/null; }
+put()  { xfconf-query -c "$1" -p "$2" -s "$4" 2>/dev/null || xfconf-query -c "$1" -p "$2" -n -t "$3" -s "$4"; }
+
+term_keys="/color-background /color-foreground /color-cursor /color-selection /color-selection-background /color-bold /color-palette"
+
+# Claude Code's theme lives in ~/.claude/settings.json ("dark-ansi", "light-ansi", ...)
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+claude_theme() {   # claude_theme        -> prints current theme
+                   # claude_theme NAME   -> sets it, keeping other settings
+    python3 -I - "$CLAUDE_SETTINGS" "${1:-}" << 'EOF'
+import json, os, sys
+path, new = sys.argv[1], sys.argv[2]
+try:
+    with open(path) as f: data = json.load(f)
+except (FileNotFoundError, ValueError):
+    data = {}
+if not new:
+    print(data.get("theme", "")); sys.exit()
+data["theme"] = new
+os.makedirs(os.path.dirname(path), exist_ok=True)
+tmp = path + ".tmp"
+with open(tmp, "w") as f: json.dump(data, f, indent=2); f.write("\n")
+os.replace(tmp, path)
+EOF
+}
+
+find_theme() {
+    for t in "$@"; do
+        for d in "$HOME/.themes" "$HOME/.local/share/themes" /usr/share/themes; do
+            [ -d "$d/$t" ] && { echo "$t"; return 0; }
+        done
+    done
+    return 1
+}
+
+icon_exists() {
+    for d in "$HOME/.local/share/icons" "$HOME/.icons" /usr/share/icons; do
+        [ -d "$d/$1" ] && return 0
+    done
+    return 1
+}
+
+ensure_prompt_block() {
+    grep -q ">>> kuromi-mode prompt >>>" "$HOME/.bashrc" 2>/dev/null && return
+    cat >> "$HOME/.bashrc" << 'EOF'
+
+# >>> kuromi-mode prompt >>>
+if [ "$(cat "$HOME/.config/kuromi-mode" 2>/dev/null)" = soft ]; then
+  PS1='\[\e[38;2;123;63;160m\]\u@\h\[\e[0m\]:\[\e[38;2;92;79;168m\]\w\[\e[0m\]\$ '
+else
+  PS1='\[\e[38;2;196;122;216m\]\u@\h\[\e[0m\]:\[\e[38;2;160;144;230m\]\w\[\e[0m\]\$ '
+fi
+# <<< kuromi-mode prompt <<<
+EOF
+}
+
+write_soft_css() {
+    [ -f "$SOFTCSS" ] && return   # keep your tweaks if you've edited it
+    mkdir -p "$GTKDIR"
+    cat > "$SOFTCSS" << 'EOF'
+/* Kuromi Soft: muted lavender light mode. Tweak these 4 colours freely. */
+@define-color soft_bg     #b69dd7;  /* window backgrounds */
+@define-color soft_view   #c6b3e0;  /* lists, text areas, menus */
+@define-color soft_header #a98bd0;  /* title bars, toolbars, panel */
+@define-color soft_fg     #2a1d33;  /* text */
+
+window.background, .background, dialog, #whiskermenu-window {
+  background-color: @soft_bg;
+}
+
+.view, iconview, treeview.view, textview text, list, list row, .sidebar,
+placessidebar, placessidebar list, scrolledwindow viewport, notebook > stack,
+entry, spinbutton, menu, .menu, .context-menu, popover, popover.background,
+tooltip.background {
+  background-color: @soft_view;
+}
+
+headerbar, .titlebar, menubar, toolbar, notebook > header,
+.xfce4-panel, .xfce4-panel.background {
+  background-color: @soft_header;
+}
+
+label, .view, textview text, entry, menuitem, treeview.view {
+  color: @soft_fg;
+}
+
+/* keep selected and highlighted things readable */
+*:selected, row:selected label, treeview.view:selected,
+button.suggested-action label, button.destructive-action label {
+  color: #ffffff;
+}
+EOF
+}
+
+case "${1:-}" in
+soft)
+    light=$(find_theme Orchis-Purple-Light Orchis-Purple) || {
+        echo "Orchis light isn't installed yet. Run:"
+        echo "  cd ~/Downloads/Orchis-theme && ./install.sh -t purple -c light"
+        exit 1; }
+    if [ "$(cat "$MODE_FILE" 2>/dev/null)" != soft ]; then
+        {   # remember your dark setup so 'dark' restores it exactly
+            echo "theme=$(get xsettings /Net/ThemeName)"
+            echo "wm=$(get xfwm4 /general/theme)"
+            echo "icons=$(get xsettings /Net/IconThemeName)"
+            for k in $term_keys; do echo "term$k=$(get xfce4-terminal "$k")"; done
+            echo "claude=$(claude_theme)"
+        } > "$SAVE"
+    fi
+    write_soft_css
+    touch "$GTKCSS"
+    grep -qF "kuromi-soft.css" "$GTKCSS" || sed -i "1i $IMPORT" "$GTKCSS"
+    [ -s "$GTKCSS" ] || echo "$IMPORT" > "$GTKCSS"
+    put xsettings /Net/ThemeName string "$light"
+    # window frames: recoloured copy of Orchis in ~/.themes/Kuromi-Soft, if it exists
+    put xfwm4 /general/theme string "$(find_theme Kuromi-Soft || echo "$light")"
+    if icon_exists Kuromi-Tela-Soft; then       # darker Kuromi-Tela badges for the light theme
+        put xsettings /Net/IconThemeName string Kuromi-Tela-Soft
+    elif icon_exists Kuromi-Candy-Light; then
+        put xsettings /Net/IconThemeName string Kuromi-Candy-Light
+    else
+        echo "(no Soft icon theme found, keeping your current icons)"
+    fi
+    put xfce4-terminal /color-use-theme bool false
+    put xfce4-terminal /color-background string '#b89dc8'
+    put xfce4-terminal /color-foreground string '#2a1d33'
+    put xfce4-terminal /color-cursor string '#7b3fa0'
+    put xfce4-terminal /color-selection string '#ffffff'
+    put xfce4-terminal /color-selection-background string '#7b3fa0'
+    put xfce4-terminal /color-bold string '#1e1424'
+    # blues are dusky periwinkle; "white" slots are light so highlights stay readable
+    put xfce4-terminal /color-palette string '#2a1d33;#a8305f;#3c6e4a;#7d5f1a;#5c4fa8;#7b3fa0;#2c6670;#c4b8d0;#4a3757;#c0447a;#4c8059;#94721f;#6a5fb8;#9350b8;#367a85;#cfc5d9'
+    claude_theme light-ansi   # dark-ansi highlights are unreadable on the lavender background
+    ensure_prompt_block
+    echo soft > "$MODE_FILE"
+    echo "Kuromi Soft is on 🌸 Open a new terminal for the matching prompt."
+    echo "Some apps only fully switch after you reopen them."
+    ;;
+dark)
+    theme="Orchis-Purple-Dark"; wm="Orchis-Purple-Dark"; icons="Kuromi-Candy"; claude="dark-ansi"
+    declare -A term
+    if [ -f "$SAVE" ]; then
+        while IFS='=' read -r k v; do
+            case "$k" in
+                theme) [ -n "$v" ] && theme="$v" ;;
+                wm)    [ -n "$v" ] && wm="$v" ;;
+                icons) [ -n "$v" ] && icons="$v" ;;
+                claude) [ -n "$v" ] && [ "$v" != light-ansi ] && claude="$v" ;;
+                term/*) term["${k#term}"]="$v" ;;
+            esac
+        done < "$SAVE"
+    fi
+    [ -f "$GTKCSS" ] && sed -i '/kuromi-soft.css/d' "$GTKCSS"
+    put xsettings /Net/ThemeName string "$theme"
+    put xfwm4 /general/theme string "$wm"
+    put xsettings /Net/IconThemeName string "$icons"
+    for k in $term_keys; do
+        [ -n "${term[$k]:-}" ] && put xfce4-terminal "$k" string "${term[$k]}"
+    done
+    claude_theme "$claude"
+    ensure_prompt_block
+    echo dark > "$MODE_FILE"
+    echo "Back to dark Kuromi 🖤 Open a new terminal for the matching prompt."
+    ;;
+*)
+    echo "Current mode: $(cat "$MODE_FILE" 2>/dev/null || echo dark)"
+    echo "Usage: kuromi-mode soft | kuromi-mode dark"
+    ;;
+esac
