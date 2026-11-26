@@ -1,0 +1,37 @@
+@import url("file:///home/k9unit/.config/gtk-3.0/kuromi-soft.css");
+/* Kuromi purple selections */
+@define-color kuromi_purple #7b3fa0;
+
+row:selected,
+treeview.view:selected,
+.view:selected,
+iconview:selected,
+list row:selected,
+flowboxchild:selected,
+menuitem:hover,
+menu menuitem:hover {
+  background-color: @kuromi_purple;
+  color: #ffffff;
+}
+
+*:selected,
+selection {
+  background-color: @kuromi_purple;
+  color: #ffffff;
+}
+
+/* Whisker menu: Kuromi purple instead of grey */
+#whiskermenu-window button:checked,
+#whiskermenu-window button:hover,
+#whiskermenu-window treeview:selected {
+  background-color: @kuromi_purple;
+  color: #ffffff;
+}
+
+/* Whisker menu: Kuromi purple instead of grey */
+#whiskermenu-window button:checked,
+#whiskermenu-window button:hover,
+#whiskermenu-window treeview:selected {
+  background-color: @kuromi_purple;
+  color: #ffffff;
+}

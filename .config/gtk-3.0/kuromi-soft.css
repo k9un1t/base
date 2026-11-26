@@ -1,0 +1,31 @@
+/* Kuromi Soft: muted lavender light mode. Tweak these 4 colours freely. */
+@define-color soft_bg     #a396b1;  /* window backgrounds */
+@define-color soft_view   #aea2bb;  /* lists, text areas, menus */
+@define-color soft_header #95889f;  /* title bars, toolbars, panel */
+@define-color soft_fg     #2a1d33;  /* text */
+
+window.background, .background, dialog, #whiskermenu-window {
+  background-color: @soft_bg;
+}
+
+.view, iconview, treeview.view, textview text, list, list row, .sidebar,
+placessidebar, placessidebar list, scrolledwindow viewport, notebook > stack,
+entry, spinbutton, menu, .menu, .context-menu, popover, popover.background,
+tooltip.background {
+  background-color: @soft_view;
+}
+
+headerbar, .titlebar, menubar, toolbar, notebook > header,
+.xfce4-panel, .xfce4-panel.background {
+  background-color: @soft_header;
+}
+
+label, .view, textview text, entry, menuitem, treeview.view {
+  color: @soft_fg;
+}
+
+/* keep selected and highlighted things readable */
+*:selected, row:selected label, treeview.view:selected,
+button.suggested-action label, button.destructive-action label {
+  color: #ffffff;
+}

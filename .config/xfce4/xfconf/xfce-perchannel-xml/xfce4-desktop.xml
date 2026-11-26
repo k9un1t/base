@@ -8,10 +8,17 @@
         <property name="color1" type="empty"/>
         <property name="color2" type="empty"/>
         <property name="color-style" type="empty"/>
-        <property name="image-path" type="empty"/>
+        <property name="image-path" type="string" value="/home/k9unit/Pictures/DSCF3544.JPG"/>
         <property name="image-show" type="empty"/>
         <property name="last-image" type="empty"/>
         <property name="last-single-image" type="empty"/>
+        <property name="image-style" type="int" value="5"/>
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/home/k9unit/Pictures/DSCF3544.JPG"/>
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="backdrop-cycle-enable" type="bool" value="false"/>
+        </property>
       </property>
       <property name="monitor1" type="empty">
         <property name="brightness" type="empty"/>
@@ -27,38 +34,55 @@
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="rgba1" type="array">
-            <value type="double" value="0.23921568627450981"/>
-            <value type="double" value="0.2196078431372549"/>
-            <value type="double" value="0.27450980392156865"/>
+            <value type="double" value="1"/>
+            <value type="double" value="1"/>
+            <value type="double" value="1"/>
             <value type="double" value="1"/>
           </property>
           <property name="backdrop-cycle-enable" type="bool" value="false"/>
-          <property name="last-image" type="string" value="/home/k9unit/Pictures/IMG_4735.JPG"/>
+          <property name="last-image" type="string" value="/home/k9unit/Pictures/DSCF3555.JPG"/>
           <property name="image-style" type="int" value="5"/>
         </property>
       </property>
+      <property name="monitorHDMI-0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/home/k9unit/Pictures/kuromi2.jpg"/>
+          <property name="image-style" type="int" value="4"/>
+        </property>
+        <property name="workspace1" type="empty">
+          <property name="last-image" type="string" value="/home/k9unit/Pictures/DSCF1335.JPG"/>
+        </property>
+      </property>
     </property>
-    <property name="single-workspace-mode" type="bool" value="true"/>
+    <property name="single-workspace-mode" type="bool" value="false"/>
     <property name="single-workspace-number" type="int" value="0"/>
   </property>
   <property name="last-settings-migration-version" type="uint" value="1"/>
   <property name="desktop-icons" type="empty">
     <property name="use-custom-font-size" type="bool" value="true"/>
-    <property name="icon-size" type="uint" value="30"/>
+    <property name="icon-size" type="uint" value="44"/>
     <property name="use-custom-label-background-color" type="bool" value="false"/>
     <property name="tooltip-size" type="double" value="52"/>
-    <property name="font-size" type="double" value="10"/>
-    <property name="style" type="int" value="0"/>
+    <property name="font-size" type="double" value="14"/>
+    <property name="style" type="int" value="2"/>
     <property name="primary" type="bool" value="true"/>
     <property name="file-icons" type="empty">
       <property name="show-filesystem" type="bool" value="false"/>
       <property name="show-home" type="bool" value="false"/>
-      <property name="show-removable" type="bool" value="true"/>
+      <property name="show-removable" type="bool" value="false"/>
     </property>
+    <property name="use-custom-label-text-color" type="bool" value="true"/>
+    <property name="label-text-color" type="array">
+      <value type="double" value="1"/>
+      <value type="double" value="1"/>
+      <value type="double" value="1"/>
+      <value type="double" value="1"/>
+    </property>
+    <property name="show-hidden-files" type="bool" value="false"/>
   </property>
   <property name="last" type="empty">
-    <property name="window-width" type="int" value="672"/>
-    <property name="window-height" type="int" value="547"/>
+    <property name="window-width" type="int" value="1119"/>
+    <property name="window-height" type="int" value="796"/>
   </property>
   <property name="windowlist-menu" type="empty">
     <property name="show-all-workspaces" type="bool" value="false"/>

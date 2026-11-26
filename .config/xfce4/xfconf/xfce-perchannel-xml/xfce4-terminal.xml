@@ -1,0 +1,29 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfce4-terminal" version="1.0">
+  <property name="misc-cursor-shape" type="string" value="TERMINAL_CURSOR_SHAPE_IBEAM"/>
+  <property name="misc-cursor-blinks" type="bool" value="true"/>
+  <property name="background-mode" type="string" value="TERMINAL_BACKGROUND_TRANSPARENT"/>
+  <property name="background-darkness" type="double" value="0.83999999999999997"/>
+  <property name="color-foreground" type="string" value="#2a1d33"/>
+  <property name="color-background" type="string" value="#aea2bb"/>
+  <property name="color-background-vary" type="bool" value="false"/>
+  <property name="color-cursor-foreground" type="string" value=""/>
+  <property name="color-cursor" type="string" value="#7b3fa0"/>
+  <property name="color-cursor-use-default" type="bool" value="false"/>
+  <property name="color-selection" type="string" value="#ffffff"/>
+  <property name="color-selection-background" type="string" value="#7b3fa0"/>
+  <property name="color-selection-use-default" type="bool" value="false"/>
+  <property name="color-bold" type="string" value="#1e1424"/>
+  <property name="color-bold-use-default" type="bool" value="false"/>
+  <property name="color-palette" type="string" value="#2a1d33;#a8305f;#3c6e4a;#7d5f1a;#463c96;#7b3fa0;#2c6670;#5a4a66;#4a3757;#c0447a;#4c8059;#94721f;#5a4fb0;#9350b8;#367a85;#3a2a45"/>
+  <property name="color-bold-is-bright" type="bool" value="true"/>
+  <property name="color-use-theme" type="bool" value="false"/>
+  <property name="tab-activity-color" type="string" value="#aa0000"/>
+  <property name="misc-borders-default" type="bool" value="true"/>
+  <property name="font-allow-bold" type="bool" value="true"/>
+  <property name="misc-toolbar-default" type="bool" value="false"/>
+  <property name="misc-menubar-default" type="bool" value="false"/>
+  <property name="misc-default-geometry" type="string" value="77x24"/>
+  <property name="font-name" type="string" value="Monospace 16"/>
+</channel>

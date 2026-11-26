@@ -57,4 +57,11 @@
   <property name="shutdown" type="empty">
     <property name="LockScreen" type="bool" value="false"/>
   </property>
+  <property name="compat" type="empty">
+    <property name="LaunchGNOME" type="bool" value="false"/>
+    <property name="LaunchKDE" type="bool" value="false"/>
+  </property>
+  <property name="chooser" type="empty">
+    <property name="AlwaysDisplay" type="bool" value="true"/>
+  </property>
 </channel>
