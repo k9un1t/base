@@ -16,7 +16,7 @@
   <property name="color-selection-use-default" type="bool" value="false"/>
   <property name="color-bold" type="string" value="#1e1424"/>
   <property name="color-bold-use-default" type="bool" value="false"/>
-  <property name="color-palette" type="string" value="#2a1d33;#a8305f;#3c6e4a;#7d5f1a;#463c96;#7b3fa0;#2c6670;#5a4a66;#4a3757;#c0447a;#4c8059;#94721f;#5a4fb0;#9350b8;#367a85;#3a2a45"/>
+  <property name="color-palette" type="string" value="#2a1d33;#a8305f;#3c6e4a;#7d5f1a;#5c4fa8;#7b3fa0;#2c6670;#c4b8d0;#4a3757;#c0447a;#4c8059;#94721f;#6a5fb8;#9350b8;#367a85;#cfc5d9"/>
   <property name="color-bold-is-bright" type="bool" value="true"/>
   <property name="color-use-theme" type="bool" value="false"/>
   <property name="tab-activity-color" type="string" value="#aa0000"/>
