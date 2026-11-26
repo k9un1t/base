@@ -2,6 +2,7 @@
 
 *
 !.gitignore
+!.gitmodules
 !post-checkout
 
 !README.md

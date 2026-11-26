@@ -1,0 +1,7 @@
+[submodule ".icons/candy-icons"]
+	path = .icons/candy-icons
+	url = https://github.com/EliverLara/candy-icons.git
+[submodule ".themes/Sweet-Dark"]
+	path = .themes/Sweet-Dark
+	url = https://github.com/EliverLara/Sweet.git
+	branch = nova
