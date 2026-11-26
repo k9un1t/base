@@ -29,3 +29,38 @@ label, .view, textview text, entry, menuitem, treeview.view {
 button.suggested-action label, button.destructive-action label {
   color: #ffffff;
 }
+
+/* Whisker menu: one lilac surface with an orchid border and soft plum shadow */
+@define-color whisker_lilac       #b69dd7;  /* menu background */
+@define-color whisker_lilac_light #c6b3e0;  /* search box */
+@define-color whisker_border      #7e54b6;  /* deeper orchid edge */
+
+window#whiskermenu-window {
+  background-color: @whisker_lilac;   /* the window can't be see-through, so no rounded corners */
+}
+
+window#whiskermenu-window > frame > border {
+  background-color: @whisker_lilac;
+  border: 2px solid @whisker_border;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: 0 3px 6px -1px alpha(#3d2956, 0.35),
+              0 6px 14px 0 alpha(#3d2956, 0.22),
+              inset 0 1px alpha(#d7c9e9, 0.6);
+}
+
+window#whiskermenu-window scrolledwindow.frame,
+window#whiskermenu-window scrolledwindow.frame treeview.view,
+window#whiskermenu-window scrolledwindow.frame viewport,
+window#whiskermenu-window box.categories,
+window#whiskermenu-window .view,
+window#whiskermenu-window list,
+window#whiskermenu-window list row {
+  background-color: transparent;
+  border: none;
+}
+
+window#whiskermenu-window entry.search,
+window#whiskermenu-window entry.search:focus {
+  background-color: @whisker_lilac_light;
+}

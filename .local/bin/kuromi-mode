@@ -20,7 +20,18 @@ IMPORT="@import url(\"file://$SOFTCSS\");"
 get()  { xfconf-query -c "$1" -p "$2" 2>/dev/null; }
 put()  { xfconf-query -c "$1" -p "$2" -s "$4" 2>/dev/null || xfconf-query -c "$1" -p "$2" -n -t "$3" -s "$4"; }
 
-term_keys="/color-background /color-foreground /color-cursor /color-selection /color-selection-background /color-bold /color-palette"
+term_keys="/color-background /color-foreground /color-cursor /color-selection /color-selection-background /color-bold /color-palette /background-mode /background-darkness"
+
+# Top panel colour: 4 numbers 0-1 (red, green, blue, opacity), written as "r,g,b,a"
+PANEL_RGBA=/panels/panel-1/background-rgba
+get_rgba() { xfconf-query -c xfce4-panel -p "$PANEL_RGBA" 2>/dev/null | grep -E '^[0-9.]+$' | paste -sd, -; }
+put_rgba() {
+    local IFS=, args=() v
+    for v in $1; do args+=(-t double -s "$v"); done
+    [ "${#args[@]}" -eq 16 ] || { echo "(panel colour '$1' isn't 4 numbers, leaving the panel alone)"; return 0; }
+    xfconf-query -c xfce4-panel -p "$PANEL_RGBA" "${args[@]}" 2>/dev/null \
+        || xfconf-query -c xfce4-panel -p "$PANEL_RGBA" -n -a "${args[@]}"
+}
 
 # Claude Code's theme lives in ~/.claude/settings.json ("dark-ansi", "light-ansi", ...)
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
@@ -108,6 +119,41 @@ label, .view, textview text, entry, menuitem, treeview.view {
 button.suggested-action label, button.destructive-action label {
   color: #ffffff;
 }
+
+/* Whisker menu: one lilac surface with an orchid border and soft plum shadow */
+@define-color whisker_lilac       #b69dd7;  /* menu background */
+@define-color whisker_lilac_light #c6b3e0;  /* search box */
+@define-color whisker_border      #7e54b6;  /* deeper orchid edge */
+
+window#whiskermenu-window {
+  background-color: @whisker_lilac;   /* the window can't be see-through, so no rounded corners */
+}
+
+window#whiskermenu-window > frame > border {
+  background-color: @whisker_lilac;
+  border: 2px solid @whisker_border;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: 0 3px 6px -1px alpha(#3d2956, 0.35),
+              0 6px 14px 0 alpha(#3d2956, 0.22),
+              inset 0 1px alpha(#d7c9e9, 0.6);
+}
+
+window#whiskermenu-window scrolledwindow.frame,
+window#whiskermenu-window scrolledwindow.frame treeview.view,
+window#whiskermenu-window scrolledwindow.frame viewport,
+window#whiskermenu-window box.categories,
+window#whiskermenu-window .view,
+window#whiskermenu-window list,
+window#whiskermenu-window list row {
+  background-color: transparent;
+  border: none;
+}
+
+window#whiskermenu-window entry.search,
+window#whiskermenu-window entry.search:focus {
+  background-color: @whisker_lilac_light;
+}
 EOF
 }
 
@@ -124,6 +170,7 @@ soft)
             echo "icons=$(get xsettings /Net/IconThemeName)"
             for k in $term_keys; do echo "term$k=$(get xfce4-terminal "$k")"; done
             echo "claude=$(claude_theme)"
+            echo "panel=$(get_rgba)"
         } > "$SAVE"
     fi
     write_soft_css
@@ -151,6 +198,9 @@ soft)
     put xfce4-terminal /color-bold string '#1e1424'
     # blues are dusky periwinkle; "white" slots are light so highlights stay readable
     put xfce4-terminal /color-palette string '#2a1d33;#a8305f;#3c6e4a;#7d5f1a;#5c4fa8;#7b3fa0;#2c6670;#c4b8d0;#4a3757;#c0447a;#4c8059;#94721f;#6a5fb8;#9350b8;#367a85;#cfc5d9'
+    put xfce4-terminal /background-mode string TERMINAL_BACKGROUND_TRANSPARENT
+    put xfce4-terminal /background-darkness double 0.92   # 92% opaque
+    put_rgba "0.662,0.546,0.814,0.658"   # top panel: #a98bd0 at 66% opacity
     claude_theme light-ansi   # dark-ansi highlights are unreadable on the lavender background
     ensure_prompt_block
     echo soft > "$MODE_FILE"
@@ -159,7 +209,11 @@ soft)
     ;;
 dark)
     theme="Orchis-Purple-Dark"; wm="Orchis-Purple-Dark"; icons="Kuromi-Candy"; claude="dark-ansi"
+    panel="0.180,0.133,0.220,0.66"   # fallback: dark plum #2e2238 at 66% opacity
     declare -A term
+    # fallbacks for settings older saves don't have
+    term[/background-mode]=TERMINAL_BACKGROUND_TRANSPARENT
+    term[/background-darkness]=0.84
     if [ -f "$SAVE" ]; then
         while IFS='=' read -r k v; do
             case "$k" in
@@ -167,7 +221,8 @@ dark)
                 wm)    [ -n "$v" ] && wm="$v" ;;
                 icons) [ -n "$v" ] && icons="$v" ;;
                 claude) [ -n "$v" ] && [ "$v" != light-ansi ] && claude="$v" ;;
-                term/*) term["${k#term}"]="$v" ;;
+                panel)  [ -n "$v" ] && panel="$v" ;;
+                term/*) [ -n "$v" ] && term["${k#term}"]="$v" ;;
             esac
         done < "$SAVE"
     fi
@@ -178,6 +233,7 @@ dark)
     for k in $term_keys; do
         [ -n "${term[$k]:-}" ] && put xfce4-terminal "$k" string "${term[$k]}"
     done
+    put_rgba "$panel"
     claude_theme "$claude"
     ensure_prompt_block
     echo dark > "$MODE_FILE"
