@@ -111,4 +111,16 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+PS1="\[\e[38;2;196;122;216m\]\u@\h\[\e[0m\]:\[\e[38;2;160;144;230m\]\w\[\e[0m\]\$ "
+
+# Created by `pipx` on 2026-10-09 14:27:28
+export PATH="$PATH:/home/k9unit/.local/bin"
 case ":$PATH:" in *:/usr/sbin:*) ;; *) export PATH="$PATH:/usr/sbin" ;; esac
+
+# >>> kuromi-mode prompt >>>
+if [ "$(cat "$HOME/.config/kuromi-mode" 2>/dev/null)" = soft ]; then
+  PS1='\[\e[38;2;123;63;160m\]\u@\h\[\e[0m\]:\[\e[38;2;74;63;160m\]\w\[\e[0m\]\$ '
+else
+  PS1='\[\e[38;2;196;122;216m\]\u@\h\[\e[0m\]:\[\e[38;2;160;144;230m\]\w\[\e[0m\]\$ '
+fi
+# <<< kuromi-mode prompt <<<
